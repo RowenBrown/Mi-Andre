@@ -1,199 +1,22 @@
-import { useState } from "react";
-
-const PLATFORMS = {
-  instagram: { name: "Instagram", color: "#E1306C", icon: "📸" },
-  facebook: { name: "Facebook", color: "#1877F2", icon: "👥" },
-};
-
-const DAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
-const MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-
-const INITIAL_POSTS = [
-  { id: 1, platform: "instagram", title: "Lanzamiento colección verano", date: "2026-04-02", time: "10:00", status: "programado", content: "¡Nueva colección ya disponible! 🌞 #verano2026", likes: 0, reach: 0 },
-  { id: 2, platform: "facebook", title: "Oferta especial fin de semana", date: "2026-04-05", time: "12:00", status: "programado", content: "Este fin de semana, 20% de descuento en toda la tienda.", likes: 0, reach: 0 },
-  { id: 3, platform: "instagram", title: "Behind the scenes", date: "2026-03-25", time: "18:00", status: "publicado", content: "Un vistazo a cómo creamos todo desde cero 🎥", likes: 243, reach: 1820 },
-  { id: 4, platform: "facebook", title: "Testimonio cliente destacado", date: "2026-03-20", time: "09:00", status: "publicado", content: '"Increíble experiencia, volvería sin dudarlo." - María G.', likes: 87, reach: 654 },
-];
-
-const INITIAL_IDEAS = [
-  { id: 1, platform: "instagram", title: "Reel tutorial de producto", tags: ["educación", "viral"], priority: "alta" },
-  { id: 2, platform: "facebook", title: "Encuesta: ¿qué contenido prefieres?", tags: ["engagement"], priority: "media" },
-  { id: 3, platform: "instagram", title: "Colaboración con influencer local", tags: ["colaboración", "alcance"], priority: "alta" },
-  { id: 4, platform: "facebook", title: "Post informativo sobre el sector", tags: ["educación"], priority: "baja" },
-];
-
-const METRICS = {
-  instagram: { followers: 4820, growth: "+3.2%", likes: 1243, reach: 18400, engagement: "5.8%" },
-  facebook: { followers: 2310, growth: "+1.1%", likes: 487, reach: 7200, engagement: "3.4%" },
-};
-
-function PlatformBadge({ platform, small }) {
-  const p = PLATFORMS[platform];
-  return (
-    <span style={{
-      background: p.color + "22",
-      color: p.color,
-      border: `1px solid ${p.color}44`,
-      borderRadius: 6,
-      padding: small ? "2px 7px" : "3px 10px",
-      fontSize: small ? 11 : 12,
-      fontWeight: 600,
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 4,
-    }}>
-      {p.icon} {p.name}
-    </span>
-  );
+{
+  "name": "mi-andre",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.344.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.4"
+  }
 }
-
-function StatusBadge({ status }) {
-  const map = {
-    programado: { bg: "#FFF3CD", color: "#856404", label: "Programado" },
-    publicado: { bg: "#D1FAE5", color: "#065F46", label: "Publicado" },
-    borrador: { bg: "#F3F4F6", color: "#6B7280", label: "Borrador" },
-  };
-  const s = map[status] || map.borrador;
-  return (
-    <span style={{ background: s.bg, color: s.color, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 600 }}>
-      {s.label}
-    </span>
-  );
-}
-
-function CalendarView({ posts }) {
-  const [currentMonth, setCurrentMonth] = useState(3);
-  const [currentYear] = useState(2026);
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const offset = firstDay === 0 ? 6 : firstDay - 1;
-  const postsByDate = {};
-  posts.forEach(p => {
-    const d = p.date;
-    if (!postsByDate[d]) postsByDate[d] = [];
-    postsByDate[d].push(p);
-  });
-  const cells = [];
-  for (let i = 0; i < offset; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-  return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <button onClick={() => setCurrentMonth(m => Math.max(0, m - 1))} style={navBtn}>‹</button>
-        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: "#1a1a2e" }}>
-          {MONTHS[currentMonth]} {currentYear}
-        </span>
-        <button onClick={() => setCurrentMonth(m => Math.min(11, m + 1))} style={navBtn}>›</button>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4 }}>
-        {DAYS.map(d => (
-          <div key={d} style={{ textAlign: "center", fontSize: 11, fontWeight: 700, color: "#9CA3AF", padding: "6px 0", letterSpacing: 1 }}>{d}</div>
-        ))}
-        {cells.map((day, i) => {
-          if (!day) return <div key={`e-${i}`} />;
-          const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-          const dayPosts = postsByDate[dateStr] || [];
-          const isToday = dateStr === "2026-03-30";
-          return (
-            <div key={day} style={{
-              minHeight: 64,
-              border: isToday ? "2px solid #6366F1" : "1px solid #E5E7EB",
-              borderRadius: 8,
-              padding: "4px 5px",
-              background: isToday ? "#EEF2FF" : "#fff",
-            }}>
-              <div style={{ fontSize: 12, fontWeight: isToday ? 700 : 400, color: isToday ? "#6366F1" : "#374151", marginBottom: 3 }}>{day}</div>
-              {dayPosts.slice(0, 2).map(p => (
-                <div key={p.id} style={{
-                  background: PLATFORMS[p.platform].color,
-                  color: "#fff",
-                  fontSize: 9,
-                  borderRadius: 4,
-                  padding: "1px 4px",
-                  marginBottom: 2,
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  fontWeight: 600,
-                }}>{PLATFORMS[p.platform].icon} {p.title}</div>
-              ))}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function WeeklyView({ posts }) {
-  const [weekStart, setWeekStart] = useState(() => new Date(2026, 2, 30));
-  const days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(weekStart);
-    d.setDate(weekStart.getDate() + i);
-    return d;
-  });
-  const toDateStr = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  const postsByDate = {};
-  posts.forEach(p => {
-    if (!postsByDate[p.date]) postsByDate[p.date] = [];
-    postsByDate[p.date].push(p);
-  });
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 10 }}>
-      {days.map((day, i) => {
-        const dateStr = toDateStr(day);
-        const dayPosts = postsByDate[dateStr] || [];
-        return (
-          <div key={i} style={{ minHeight: 160, border: "1px solid #E5E7EB", borderRadius: 12, padding: "10px 8px", background: "#fff" }}>
-            <div style={{ textAlign: "center", marginBottom: 6 }}>
-              <div style={{ fontSize: 10, color: "#9CA3AF" }}>{DAYS[i]}</div>
-              <div style={{ fontSize: 22, fontWeight: 700 }}>{day.getDate()}</div>
-            </div>
-            {dayPosts.map(p => (
-              <div key={p.id} style={{ background: PLATFORMS[p.platform].color, borderRadius: 8, padding: "4px", color: "#fff", fontSize: 10, marginBottom: 4 }}>
-                {p.title}
-              </div>
-            ))}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function PostForm({ onSave, onCancel, initial }) {
-  const [form, setForm] = useState(initial || { platform: "instagram", title: "", date: "", time: "10:00", content: "", status: "programado" });
-  return (
-    <div style={{ background: "#fff", padding: 20, borderRadius: 12, border: "1px solid #E5E7EB" }}>
-      <input style={inputStyle} placeholder="Título" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
-      <button onClick={() => onSave(form)} style={{ background: "#6366F1", color: "#fff", border: "none", padding: "10px", borderRadius: 8, marginTop: 10 }}>Guardar</button>
-      <button onClick={onCancel} style={{ marginLeft: 10 }}>Cancelar</button>
-    </div>
-  );
-}
-
-export default function App() {
-  const [tab, setTab] = useState("dashboard");
-  const [posts, setPosts] = useState(INITIAL_POSTS);
-  const [ideas, setIdeas] = useState(INITIAL_IDEAS);
-
-  return (
-    <div style={{ display: "flex", minHeight: "100vh", fontFamily: "sans-serif", background: "#F1F5F9" }}>
-      <div style={{ width: 220, background: "#1a1a2e", color: "#fff", padding: 20 }}>
-        <h2>SocialHQ</h2>
-        <button onClick={() => setTab("dashboard")} style={sideBtn}>Dashboard</button>
-        <button onClick={() => setTab("calendar")} style={sideBtn}>Calendario</button>
-        <button onClick={() => setTab("weekly")} style={sideBtn}>Semana</button>
-      </div>
-      <div style={{ flex: 1, padding: 32 }}>
-        {tab === "dashboard" && <h1>Bienvenido, Rowema</h1>}
-        {tab === "calendar" && <CalendarView posts={posts} />}
-        {tab === "weekly" && <WeeklyView posts={posts} />}
-      </div>
-    </div>
-  );
-}
-
-const sideBtn = { background: "transparent", color: "#fff", border: "none", display: "block", padding: "10px 0", cursor: "pointer", width: "100%", textAlign: "left" };
-const navBtn = { background: "#fff", border: "1px solid #ddd", borderRadius: "50%", width: 30, height: 30, cursor: "pointer" };
-const inputStyle = { width: "100%", padding: "10px", borderRadius: 8, border: "1px solid #ddd" };
