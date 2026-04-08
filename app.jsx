@@ -552,7 +552,7 @@ function DashboardView({ posts, ideas, onNewPost }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: C.text, letterSpacing: "-0.5px" }}>Dashboard</h1>
-        <p style={{ fontSize: 13, color: C.textSecondary, marginTop: 4 }}>Bienvenido a SocialHQ — todo bajo control.</p>
+        <p style={{ fontSize: 13, color: C.textSecondary, marginTop: 4 }}>Bienvenido a CosmoAndre — todo bajo control.</p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
         <StatCard label="Posts totales"  value={posts.length}                               icon="📋" color={C.accent}   />
