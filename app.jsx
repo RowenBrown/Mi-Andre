@@ -796,8 +796,24 @@ export default function App() {
         display: "flex", flexDirection: "column", gap: 4,
         position: "sticky", top: 0, height: "100vh",
       }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: C.primary, marginBottom: 36, letterSpacing: "-0.5px", paddingLeft: 8 }}>
-          Social<span style={{ color: C.accent }}>HQ</span>
+        {/* LOGO COSMO ANDRE ✨ */}
+        <div style={{ marginBottom: 40, padding: "0 8px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ 
+            width: 42, height: 42, 
+            background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`, 
+            borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 8px 16px ${C.primary}44`, fontSize: 22
+          }}>
+            🌙
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ fontSize: 20, fontWeight: 800, color: C.text, letterSpacing: "-0.5px", lineHeight: 1 }}>
+              Cosmo<span style={{ color: C.primary }}>Andre</span>
+            </span>
+            <span style={{ fontSize: 9, fontWeight: 700, color: C.textSecondary, letterSpacing: "1.2px", textTransform: "uppercase", marginTop: 4 }}>
+              Creatividad Infinita ✨
+            </span>
+          </div>
         </div>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} className="tab-btn" style={{
