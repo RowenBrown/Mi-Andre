@@ -55,8 +55,24 @@ export default function App() {
   };
 
   // ... (El resto de tu diseño de UI se queda igual)
-  
+  // ... (todo lo que ya tienes de las funciones de Firebase)
+
   return (
-    // ... (Todo tu código de renderizado que ya tenías)
+    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+      <h1>Proyecto Mi-Andre</h1>
+      <p>¡Vercel y Firebase están conectados correctamente!</p>
+      <div style={{ marginTop: '20px', border: '1px solid #ccc', padding: '10px' }}>
+        <h3>Tus Posts:</h3>
+        {posts.length === 0 ? (
+          <p>No hay posts todavía en la base de datos.</p>
+        ) : (
+          <ul>
+            {posts.map(post => (
+              <li key={post.id}>{post.title || "Post sin título"}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }
